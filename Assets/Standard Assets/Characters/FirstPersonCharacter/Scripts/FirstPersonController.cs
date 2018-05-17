@@ -1,5 +1,6 @@
 using System;
 using UnityEngine;
+using UnityEngine.UI;
 using UnityStandardAssets.CrossPlatformInput;
 using UnityStandardAssets.Utility;
 using Random = UnityEngine.Random;
@@ -42,6 +43,11 @@ namespace UnityStandardAssets.Characters.FirstPerson
         private bool m_Jumping;
         private AudioSource m_AudioSource;
 
+		// TO DISPLAY BULLET COUNT IN THE SCREEN
+		private int countBullets;
+		public Text countBulletsText;
+		public Text messageText;
+
         // Use this for initialization
         private void Start()
         {
@@ -55,6 +61,8 @@ namespace UnityStandardAssets.Characters.FirstPerson
             m_Jumping = false;
             m_AudioSource = GetComponent<AudioSource>();
 			m_MouseLook.Init(transform , m_Camera.transform);
+
+			countBullets = 160;
         }
 
 
@@ -81,6 +89,8 @@ namespace UnityStandardAssets.Characters.FirstPerson
             }
 
             m_PreviouslyGrounded = m_CharacterController.isGrounded;
+
+			displayCountBullets ();
         }
 
 
@@ -199,8 +209,7 @@ namespace UnityStandardAssets.Characters.FirstPerson
             }
             m_Camera.transform.localPosition = newCameraPosition;
         }
-
-
+			
         private void GetInput(out float speed)
         {
             // Read input
@@ -255,5 +264,15 @@ namespace UnityStandardAssets.Characters.FirstPerson
             }
             body.AddForceAtPosition(m_CharacterController.velocity*0.1f, hit.point, ForceMode.Impulse);
         }
+
+		private void displayCountBullets()
+		{
+			countBulletsText.text = "Bullets remaining: " + countBullets.ToString ();
+
+			if (countBullets <= 1)
+			{
+				messageText.text = "You ran out of bullets!";
+			}
+		}		
     }
 }
