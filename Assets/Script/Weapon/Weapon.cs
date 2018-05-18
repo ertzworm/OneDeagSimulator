@@ -1,11 +1,21 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class Weapon : MonoBehaviour {
 
 	public const int MAX_SPAWN_POINTS = 13;
 	public int streak;
+	public float timeLeft;
+
+	// UI texts
+	public Text killCountText;
+	public Text timerCountText;
+	public Text gameOverText;
+	public Text yourScoreText;
+
+	public float seconds,minutes;
 
 	GameObject[] spawnPoints = new GameObject[MAX_SPAWN_POINTS];
 	GameObject enemy, targetCube;
@@ -22,28 +32,42 @@ public class Weapon : MonoBehaviour {
 
 	public float fireRate = .5f;
 	public float fireTimer;
+
+	private bool gameEnd;
+
+
 	// Use this for initialization
 	void Start () {
+		gameEnd = false;
 		currentBullets = bulletsPerMag;
+		gameOverText.text = "";
+		yourScoreText.text = "";
 		streak = 0;
+		timeLeft = 60.0f;
 		setFlagValue(flag, 0);
 		GetSpawnPoints();
 		GetEnemy();
 		GetEnemyHitBox();
+		setKillCountText();
 
 	}
 	
 	// Update is called once per frame
 	void Update () {
+		timeLeft -= Time.deltaTime;
+		setTimerCountText ();
 		if(Input.GetButton("Fire1")){
 			Fire();
-			
-			
 		}
 
 		if(fireTimer < fireRate){
 			fireTimer += Time.deltaTime;
 		}
+
+		if (timeLeft <= 0.0) {
+			gameOver ();
+		}
+
 
 
 	}
@@ -60,15 +84,17 @@ public class Weapon : MonoBehaviour {
 				Debug.Log(hit.transform.name + " is hit!");
 				SetEnemyPosition(enemy, spawnPoints[GetRandomNumber()]);
 				streak++;
+				setKillCountText();
 				Debug.Log("Your Streak: " +streak);
 			}else{
 				Debug.Log(hit.transform.name + "is hit instead!");
-				Debug.Log("Score is: " +streak);
+				gameOver ();
 				streak = 0;
 			}
 			
 		}else{
 			Debug.Log("Score is: " +streak);
+			gameOver ();
 			streak = 0;
 		}
 
@@ -92,6 +118,15 @@ public class Weapon : MonoBehaviour {
 		spawnPoints[11] = GameObject.Find("spawnPoint12");
 		spawnPoints[12] = GameObject.Find("spawnPoint13");
 	}
+
+	private void setKillCountText(){
+		killCountText.text = "Kill Count: " + streak.ToString (); 
+	}
+
+	private void setTimerCountText(){
+		timerCountText.text = "Time : " + timeLeft.ToString ("00"); 
+	}
+
 
 	private void GetEnemy(){
 		enemy = GameObject.Find("enemy");
@@ -127,6 +162,15 @@ public class Weapon : MonoBehaviour {
 
 	private void GetEnemyHitBox(){
 		targetCube = GameObject.Find("TargetCube");
+	}
+
+	private void gameOver () {
+		gameOverText.text = "Game Over";
+		yourScoreText.text = "Your Score: " + streak;
+		timerCountText.text = "";
+		gameEnd = true;
+		Application.Quit();
+
 	}
 
 }
