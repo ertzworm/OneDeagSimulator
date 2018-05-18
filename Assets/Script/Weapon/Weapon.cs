@@ -19,6 +19,12 @@ public class Weapon : MonoBehaviour {
 
 	GameObject[] spawnPoints = new GameObject[MAX_SPAWN_POINTS];
 	GameObject enemy, targetCube;
+	public AudioClip weaponFire;
+	public AudioSource audioS;
+	public AudioClip bellRing;
+	public AudioSource enemyHeadSource;
+
+	private Animator anim;
 
 	int [] flag = new int[MAX_SPAWN_POINTS];
 	private int counter = 0;
@@ -49,7 +55,13 @@ public class Weapon : MonoBehaviour {
 		GetEnemy();
 		GetEnemyHitBox();
 		setKillCountText();
+		anim = GetComponent<Animator>();
 
+	}
+
+	void FixedUpdate(){
+		AnimatorStateInfo info = anim.GetCurrentAnimatorStateInfo(0);
+		if(info.IsName("Fire")) anim.SetBool("Fire", false);
 	}
 	
 	// Update is called once per frame
@@ -75,13 +87,15 @@ public class Weapon : MonoBehaviour {
 	private void Fire(){
 		if(fireTimer <  fireRate) return;
 
+		audioS.PlayOneShot(weaponFire);
 		RaycastHit hit;
 
 		if(Physics.Raycast(shootPoint.position, shootPoint.transform.forward, out hit, range)){
 
-			
+			//If player hits enemy head
 			if(hit.transform.name == targetCube.transform.name){
 				Debug.Log(hit.transform.name + " is hit!");
+				enemyHeadSource.PlayOneShot(bellRing);
 				SetEnemyPosition(enemy, spawnPoints[GetRandomNumber()]);
 				streak++;
 				setKillCountText();
@@ -98,6 +112,7 @@ public class Weapon : MonoBehaviour {
 			streak = 0;
 		}
 
+		anim.SetBool("Fire", true);
 		currentBullets--;
 
 		fireTimer = 0.0f;
@@ -170,7 +185,6 @@ public class Weapon : MonoBehaviour {
 		timerCountText.text = "";
 		gameEnd = true;
 		Application.Quit();
-
 	}
 
 }

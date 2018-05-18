@@ -9,5 +9,8 @@ EditorBuildSettings:
     path: Assets/Menu.unity
     guid: 8b9085fa6494f494da640a36b9079f5e
   - enabled: 1
-    path: Assets/161.unity
-    guid: 4bc5f85c368d5704d8bcca2ae448c7dd
+    path: Assets/gameSceneDay.unity
+    guid: 802d5deb8156ed643a79e9d8769ab9de
+  - enabled: 1
+    path: Assets/gameSceneNight.unity
+    guid: ca5f74a84a1a7d6448fd46a170956e5a

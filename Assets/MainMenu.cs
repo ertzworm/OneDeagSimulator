@@ -5,6 +5,7 @@ using UnityEngine.SceneManagement;
 
 public class MainMenu : MonoBehaviour {
 
+	public bool isNight = false;
 
 
 	public void PlayGame(){
@@ -14,6 +15,10 @@ public class MainMenu : MonoBehaviour {
 	public void QuitGame(){
 		Debug.Log("You have pressed this!");
 		Application.Quit();
+	}
+
+	public void NightMode(){
+		SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 2);
 	}
 	
 }
