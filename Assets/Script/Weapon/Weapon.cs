@@ -14,6 +14,7 @@ public class Weapon : MonoBehaviour {
 	public Text timerCountText;
 	public Text gameOverText;
 	public Text yourScoreText;
+	public Text countBulletsLeft;
 
 	public float seconds,minutes;
 
@@ -49,7 +50,7 @@ public class Weapon : MonoBehaviour {
 		GetEnemy();
 		GetEnemyHitBox();
 		setKillCountText();
-
+		printBulletsLeft();
 	}
 	
 	// Update is called once per frame
@@ -67,9 +68,6 @@ public class Weapon : MonoBehaviour {
 		if (timeLeft <= 0.0) {
 			gameOver ();
 		}
-
-
-
 	}
 
 	private void Fire(){
@@ -79,7 +77,6 @@ public class Weapon : MonoBehaviour {
 
 		if(Physics.Raycast(shootPoint.position, shootPoint.transform.forward, out hit, range)){
 
-			
 			if(hit.transform.name == targetCube.transform.name){
 				Debug.Log(hit.transform.name + " is hit!");
 				SetEnemyPosition(enemy, spawnPoints[GetRandomNumber()]);
@@ -97,8 +94,9 @@ public class Weapon : MonoBehaviour {
 			gameOver ();
 			streak = 0;
 		}
-
+			
 		currentBullets--;
+		printBulletsLeft ();
 
 		fireTimer = 0.0f;
 	}
@@ -126,6 +124,7 @@ public class Weapon : MonoBehaviour {
 	private void setTimerCountText(){
 		timerCountText.text = "Time : " + timeLeft.ToString ("00"); 
 	}
+
 
 
 	private void GetEnemy(){
@@ -170,7 +169,9 @@ public class Weapon : MonoBehaviour {
 		timerCountText.text = "";
 		gameEnd = true;
 		Application.Quit();
-
 	}
 
+	private void printBulletsLeft() {
+		countBulletsLeft.text = "Bullets left: " + currentBullets.ToString ();
+	}
 }
