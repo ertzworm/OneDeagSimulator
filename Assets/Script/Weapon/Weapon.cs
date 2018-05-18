@@ -14,11 +14,12 @@ public class Weapon : MonoBehaviour {
 	public Text timerCountText;
 	public Text gameOverText;
 	public Text yourScoreText;
+	public Text countBulletsLeft;
 
 	public float seconds,minutes;
 
 	GameObject[] spawnPoints = new GameObject[MAX_SPAWN_POINTS];
-	GameObject enemy, targetCube;
+	GameObject enemy, targetCube, bulletCountPlaceholder;
 	public AudioClip weaponFire;
 	public AudioSource audioS;
 	public AudioClip bellRing;
@@ -56,7 +57,7 @@ public class Weapon : MonoBehaviour {
 		GetEnemyHitBox();
 		setKillCountText();
 		anim = GetComponent<Animator>();
-
+		printBulletsLeft ();
 	}
 
 	void FixedUpdate(){
@@ -80,7 +81,9 @@ public class Weapon : MonoBehaviour {
 			gameOver ();
 		}
 
-
+		if(Input.GetKeyDown("x")){
+			Start();
+		}
 
 	}
 
@@ -114,6 +117,7 @@ public class Weapon : MonoBehaviour {
 
 		anim.SetBool("Fire", true);
 		currentBullets--;
+		printBulletsLeft ();
 
 		fireTimer = 0.0f;
 	}
@@ -177,6 +181,10 @@ public class Weapon : MonoBehaviour {
 
 	private void GetEnemyHitBox(){
 		targetCube = GameObject.Find("TargetCube");
+	}
+
+	private void printBulletsLeft () {
+		countBulletsLeft.text = "Bullets left: " + currentBullets.ToString();
 	}
 
 	private void gameOver () {

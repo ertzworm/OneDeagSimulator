@@ -27,5 +27,6 @@ public class LaserJS : MonoBehaviour {
 				isActive = false;
 			}
 		}
+		
 	}
 }
